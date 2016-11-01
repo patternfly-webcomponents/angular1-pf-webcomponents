@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en" ng-app="demoApp">
+  <head>
+    <meta charset="utf-8">
+    <title>Angular 1.5 Demo App.</title>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/patternfly/3.13.0/css/patternfly.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/patternfly/3.13.0/css/patternfly-additions.css">
+    <link rel="stylesheet" href="node_modules/patternfly-webcomponents/dist/css/patternfly.css">
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/0.7.22/webcomponents.js"></script>
+    <script src="node_modules/angular/angular.js"></script>
+    <script src="node_modules/patternfly-webcomponents/dist/js/patternfly.js"></script>
+
+    <script src="app.module.js"></script>
+    <script src="appCtrl.js"></script>
+  </head>
+  <body>
+  <div>
+      <div ng-view>
+        <div ng-controller="appCtrl">
+          <div class="container">
+            <h2>Using PatternFly Webcomponents in Angular 1.5</h2>
+            <label class="label-title">pf-utilization-bar-chart</label>
+            <div class="row">
+              <div class="col-xs-8 col-sm-6 col-md-8">
+                <pf-utilization-bar-chart bind-events="thresholdSet" id="thresholdExample" layout="inline" chart-title="RAM Usage" used="{{used}}" total="100" units="MB" threshold-warning="60" threshold-error="85"></pf-utilization-bar-chart>
+                <span class="doc-bottom-label">Listening for Threshold Change Events: <span class="{{thresholdChangedTextClass}}" id="thresholdChangedText">{{thresholdChangedMsg}}</span></span>
+              </div>
+            </div>
+            <ul>
+              <li><label class="label-title"><i>Web components 'used' attr. value being updated from angular controller</i></label></li>
+              <li><label class="label-title"><i>angular controller listening for web components 'thresholdSet' CustomEvent</i></label></li>
+            </ul>
+          </div>
+      </div>
+    </div>
+  </div>
+  </body>
+</html>
