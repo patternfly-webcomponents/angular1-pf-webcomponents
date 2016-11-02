@@ -9,4 +9,4 @@ This uses Patternfly web components in an Angular 1.5 application.
     npm start
 URL: http://localhost:8000/
 
-![image](https://cloud.githubusercontent.com/assets/12733153/19906829/bed81af0-a052-11e6-9fc8-c1687fc8ca48.png)
+![image](https://cloud.githubusercontent.com/assets/12733153/19941681/7da0a4c0-a107-11e6-9a43-a886fec196a2.png)
