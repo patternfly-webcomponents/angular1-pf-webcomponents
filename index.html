@@ -1,39 +1,206 @@
 <!doctype html>
-<html lang="en" ng-app="demoApp">
-  <head>
-    <meta charset="utf-8">
-    <title>Angular 1.5 Demo App.</title>
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/patternfly/3.13.0/css/patternfly.css">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/patternfly/3.13.0/css/patternfly-additions.css">
-    <link rel="stylesheet" href="node_modules/patternfly-webcomponents/dist/css/patternfly.css">
+<html ng-app="apf.appModule" class="layout-pf layout-pf-fixed transitions">
+<head>
+    <meta charset="utf-8"/>
 
-    <script src="//cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/0.7.22/webcomponents.js"></script>
-    <script src="node_modules/angular/angular.js"></script>
-    <script src="node_modules/patternfly-webcomponents/dist/js/patternfly.js"></script>
+    <title>Unified Management Experience</title>
 
-    <script src="app.module.js"></script>
-    <script src="appCtrl.js"></script>
-  </head>
-  <body>
-  <div>
-      <div ng-view>
-        <div ng-controller="appCtrl">
-          <div class="container">
-            <h2>Using PatternFly Webcomponents in Angular 1.5</h2>
-            <label class="label-title">pf-utilization-bar-chart</label>
-            <div class="row">
-              <div class="col-xs-8 col-sm-6 col-md-8">
-                <pf-utilization-bar-chart bind-events="thresholdSet" id="thresholdExample" layout="inline" chart-title="RAM Usage" used="{{used}}" total="100" units="MB" threshold-warning="60" threshold-error="85"></pf-utilization-bar-chart>
-                <span class="doc-bottom-label">Listening for Threshold Change Events: <span class="{{thresholdChangedTextClass}}" id="thresholdChangedText">{{thresholdChangedMsg}}</span></span>
-              </div>
-            </div>
-            <ul>
-              <li><label class="label-title"><i>PatternFly web component's 'used' attr. value being updated from angular controller</i></label></li>
-              <li><label class="label-title"><i>Angular controller listening for PatternFly web component's 'thresholdSet' CustomEvent</i></label></li>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width"/>
+
+    <link rel="shortcut icon" href="favicon.ico?v=1"/>
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+     <!-- build:css styles/css/bower_components.css -->
+    <link rel="stylesheet" href="bower_components/patternfly/dist/css/patternfly.min.css"/>
+    <link rel="stylesheet" href="bower_components/patternfly/dist/css/patternfly-additions.min.css"/>
+    <link rel="stylesheet" href="bower_components/angular-patternfly/dist/styles/angular-patternfly.css">
+    <link rel="stylesheet" href="bower_components/angular-patternfly-shims/dist/styles/patternfly-webcomponents.css">
+    <!-- endbuild -->
+
+    <!-- build:css styles/css/app.css -->
+    <link rel="stylesheet" href="styles/app.css"/>
+    <!-- endbuild -->
+
+</head>
+<body id="pf-app" class="pf-body apf-body ng-cloak">
+  <div ng-controller="apf.appController">
+    <div pf-vertical-navigation items="navigationItems" brand-alt="UNIFIED MANAGEMENT EXPERIENCE">
+      <div ng-controller="apf.navBarController">
+        <ul class="nav navbar-nav">
+          <li><a href="#" target="_blank" class="nav-item-iconic nav-item-iconic-new-window"><span title="Launch" class="fa fa-external-link"></span></a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right navbar-iconic">
+          <li class="dropdown">
+            <a class="nav-item-iconic" id="notifications" ng-click="toggleNotificationDrawer()">
+              <span title="Notifications" class="fa" ng-class="{'fa-bell': newNotifications === true, 'fa-bell-o': newNotifications === false}"></span>
+            </a>
+          </li>
+          <li class="dropdown">
+            <a class="dropdown-toggle nav-item-iconic" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+              <span title="Help" class="fa pficon-help"></span>
+              <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+              <li><a href="#">Help</a></li>
+              <li><a href="#">About</a></li>
             </ul>
-          </div>
+          </li>
+          <li class="dropdown">
+            <a class="dropdown-toggle nav-item-iconic" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+              <span title="Username" class="fa pficon-user"></span>
+              <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+              <li><a href="#/preferences">Preferences</a></li>
+              <li><a href="#">Logout</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <div ng-controller="apf.notificationsController">
+        <div pf-toast-notification-list notifications="toastNotifications" update-viewing="updateViewingToast"></div>
+        <div pf-notification-drawer
+             drawer-hidden="hideDrawer"
+             allow-expand="true"
+             notification-groups="groups"
+             drawer-title="Notifications"
+             heading-include="{{headingHTML}}"
+             subheading-include="{{subHeadingHTML}}"
+             notification-body-include="{{notificationHTML}}"
+             notification-footer-include="{{notificationFooterHTML}}"
+             custom-scope="customScope">
+        </div>
       </div>
     </div>
   </div>
-  </body>
+
+  <div id="centralPanel" class="container-pf-nav-pf-vertical container-pf-nav-pf-vertical-with-tertiary">
+    <div class="pf-framework-content">
+        <main ng-view class="pf-framework-view"></main>
+    </div>
+  </div>
+
+  <!-- build:js js/bower_components.js -->
+  <script src="bower_components/jquery/dist/jquery.min.js"></script>
+  <script src="bower_components/bootstrap-select/js/bootstrap-select.js"></script>
+  <script src="bower_components/moment/min/moment.min.js"></script>
+  <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/angular-route/angular-route.min.js"></script>
+  <script src="bower_components/angular-resource/angular-resource.min.js"></script>
+  <script src="bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+  <script src="bower_components/patternfly/dist/js/patternfly.min.js"></script>
+  <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+  <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script src="bower_components/bootstrap-switch/dist/js/bootstrap-switch.min.js"></script>
+  <script src="bower_components/angular-translate/angular-translate.min.js"></script>
+  <script src="bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js"></script>
+  <script src="bower_components/d3/d3.js"></script>
+  <script src="bower_components/c3/c3.js"></script>
+  <script src="bower_components/angular-patternfly/dist/angular-patternfly.js"></script>
+  <script src="bower_components/lodash/lodash.min.js"></script>
+  <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="bower_components/patternfly-webcomponents/dist/js/patternfly.js"></script>
+  <script src="bower_components/angular-patternfly-shims/dist/angular-patternfly.webcomponents.js"></script>
+  <!-- endbuild -->
+
+
+
+  <!-- angular -->
+  <script src="src/app/app-module.js" type="text/javascript"></script>
+  <script src="src/templates/appModuleTemplates.js" type="text/javascript"></script>
+  <script src="src/reports/reports-module.js" type="text/javascript"></script>
+  <script src="src/reports/reports-controller.js" type="text/javascript"></script>
+  <script src="src/preferences/preferenences-module.js" type="text/javascript"></script>
+  <script src="src/preferences/preferences-controller.js" type="text/javascript"></script>
+  <script src="src/infrastructure/providers/providers-module.js" type="text/javascript"></script>
+  <script src="src/infrastructure/providers/providers-controller.js" type="text/javascript"></script>
+  <script src="src/infrastructure/providers/provider-controller.js" type="text/javascript"></script>
+  <script src="src/infrastructure/infrastructure-module.js" type="text/javascript"></script>
+  <script src="src/infrastructure/hosts/hosts-module.js" type="text/javascript"></script>
+  <script src="src/infrastructure/hosts/hosts-controller.js" type="text/javascript"></script>
+  <script src="src/infrastructure/clusters/clusters-module.js" type="text/javascript"></script>
+  <script src="src/infrastructure/clusters/clusters-controller.js" type="text/javascript"></script>
+  <script src="src/dashboard/dashboard-module.js" type="text/javascript"></script>
+  <script src="src/dashboard/dashboard-controller.js" type="text/javascript"></script>
+  <script src="src/containers/services/services-module.js" type="text/javascript"></script>
+  <script src="src/containers/services/services-controller.js" type="text/javascript"></script>
+  <script src="src/containers/routes/routes-module.js" type="text/javascript"></script>
+  <script src="src/containers/routes/routes-controller.js" type="text/javascript"></script>
+  <script src="src/containers/providers/providers-module.js" type="text/javascript"></script>
+  <script src="src/containers/providers/providers-controller.js" type="text/javascript"></script>
+  <script src="src/containers/providers/provider-controller.js" type="text/javascript"></script>
+  <script src="src/containers/providers/deploy-provider/deploy-provider-review-summary-controller.js" type="text/javascript"></script>
+  <script src="src/containers/providers/deploy-provider/deploy-provider-review-progress-controller.js" type="text/javascript"></script>
+  <script src="src/containers/providers/deploy-provider/deploy-provider-review-controller.js" type="text/javascript"></script>
+  <script src="src/containers/providers/deploy-provider/deploy-provider-master-nodes-controller.js" type="text/javascript"></script>
+  <script src="src/containers/providers/deploy-provider/deploy-provider-details-no-provider-controller.js" type="text/javascript"></script>
+  <script src="src/containers/providers/deploy-provider/deploy-provider-details-general-controller.js" type="text/javascript"></script>
+  <script src="src/containers/providers/deploy-provider/deploy-provider-details-existing-vms-controller.js" type="text/javascript"></script>
+  <script src="src/containers/providers/deploy-provider/deploy-provider-details-create-vms-controller.js" type="text/javascript"></script>
+  <script src="src/containers/providers/deploy-provider/deploy-provider-details-cdn-channel-controller.js" type="text/javascript"></script>
+  <script src="src/containers/providers/deploy-provider/deploy-provider-controller.js" type="text/javascript"></script>
+  <script src="src/containers/providers/deploy-provider/deploy-provider-config-storage-controller.js" type="text/javascript"></script>
+  <script src="src/containers/providers/deploy-provider/deploy-provider-config-settings-controller.js" type="text/javascript"></script>
+  <script src="src/containers/providers/deploy-provider/deploy-provider-config-auth-settings-controller.js" type="text/javascript"></script>
+  <script src="src/containers/providers/deploy-provider/add-host-dialog-controller.js" type="text/javascript"></script>
+  <script src="src/containers/projects/projects-module.js" type="text/javascript"></script>
+  <script src="src/containers/projects/projects-controller.js" type="text/javascript"></script>
+  <script src="src/containers/projects/project-controller.js" type="text/javascript"></script>
+  <script src="src/containers/pods/pods-module.js" type="text/javascript"></script>
+  <script src="src/containers/pods/pods-controller.js" type="text/javascript"></script>
+  <script src="src/containers/pods/pod-controller.js" type="text/javascript"></script>
+  <script src="src/containers/nodes/nodes-module.js" type="text/javascript"></script>
+  <script src="src/containers/nodes/nodes-controller.js" type="text/javascript"></script>
+  <script src="src/containers/images/images-module.js" type="text/javascript"></script>
+  <script src="src/containers/images/images-controller.js" type="text/javascript"></script>
+  <script src="src/containers/dashboard/dashboard-module.js" type="text/javascript"></script>
+  <script src="src/containers/dashboard/dashboard-controller.js" type="text/javascript"></script>
+  <script src="src/containers/containers-module.js" type="text/javascript"></script>
+  <script src="src/containers/builds/builds-module.js" type="text/javascript"></script>
+  <script src="src/containers/builds/builds-controller.js" type="text/javascript"></script>
+  <script src="src/clouds/volumes/volumes-module.js" type="text/javascript"></script>
+  <script src="src/clouds/volumes/volumes-controller.js" type="text/javascript"></script>
+  <script src="src/clouds/tenants/tenants-module.js" type="text/javascript"></script>
+  <script src="src/clouds/tenants/tenants-controller.js" type="text/javascript"></script>
+  <script src="src/clouds/clouds-module.js" type="text/javascript"></script>
+  <script src="src/applications/applications-module.js" type="text/javascript"></script>
+  <script src="src/applications/deploy-application-controller.js" type="text/javascript"></script>
+  <script src="src/applications/applications-controller.js" type="text/javascript"></script>
+  <script src="src/app/util/util-module.js" type="text/javascript"></script>
+  <script src="src/app/util/list-utils.js" type="text/javascript"></script>
+  <script src="src/app/util/dashboard-utils.js" type="text/javascript"></script>
+  <script src="src/app/util/column-config.js" type="text/javascript"></script>
+  <script src="src/app/util/chart-data-mixin.js" type="text/javascript"></script>
+  <script src="src/app/util/chart-config-util.js" type="text/javascript"></script>
+  <script src="src/app/services/notification-service.js" type="text/javascript"></script>
+  <script src="src/app/directives/charts/charts-module.js" type="text/javascript"></script>
+  <script src="src/app/directives/lists/object-list-directive.js" type="text/javascript"></script>
+  <script src="src/app/directives/lists/list-columns-directive.js" type="text/javascript"></script>
+  <script src="src/app/directives/charts/progress/progress-chart-directive.js" type="text/javascript"></script>
+  <script src="src/app/directives/charts/inline-object-status-directive.js" type="text/javascript"></script>
+  <script src="src/app/directives/charts/empty-utilization-chart-directive.js" type="text/javascript"></script>
+  <script src="src/app/directives/charts/empty-trends-chart-directive.js" type="text/javascript"></script>
+  <script src="src/app/directives/charts/data-list-usage-chart-directive.js" type="text/javascript"></script>
+  <script src="src/app/directives/card/card.module.js" type="text/javascript"></script>
+  <script src="src/app/directives/card/heatmaps/heatmaps-card-directive.js" type="text/javascript"></script>
+  <script src="src/app/controllers/notifications-controller.js" type="text/javascript"></script>
+  <script src="src/app/controllers/nav-bar-controller.js" type="text/javascript"></script>
+  <script src="src/app/controllers/app-controller.js" type="text/javascript"></script>
+  <script src="src/admin/user-admin/user-admin-module.js" type="text/javascript"></script>
+  <script src="src/admin/user-admin/users-controller.js" type="text/javascript"></script>
+  <script src="src/admin/user-admin/roles-controller.js" type="text/javascript"></script>
+  <script src="src/admin/user-admin/groups-controller.js" type="text/javascript"></script>
+  <script src="src/admin/backups/backups-module.js" type="text/javascript"></script>
+  <script src="src/admin/backups/backups-controller.js" type="text/javascript"></script>
+  <script src="src/admin/automated-tasks/automated-tasks-module.js" type="text/javascript"></script>
+  <script src="src/admin/automated-tasks/automated-tasks-controller.js" type="text/javascript"></script>
+  <script src="src/admin/admin-module.js" type="text/javascript"></script>
+  <!-- endangular -->
+
+
+
+
+</body>
 </html>
