@@ -1,12 +1,20 @@
-# Ignore Project files
-*.idea
+# generic (system) files/extensions we don't want
+*.seed
+*.log
+*.csv
+*.dat
+*.out
+*.pid
+*.gz
+.idea/*
+*.iml
+*.DS_Store
+*.swp
 
-# Ignore local nodejs packages
-node_modules/
-npm-debug.log
-
-# Ignore Desktop Services Store
-.DS_Store
-
-#Ignore generated dist files
-/dist
+node_modules
+bower_components
+dist
+lib
+.sass-cache
+.bower
+index.html
